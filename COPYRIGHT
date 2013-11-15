@@ -1,0 +1,14 @@
+.fonts/Inconsolata-g.ttf:
+  SIL Open Font License, 1.1
+  By Raph Levien.
+  Modified by David Zhou, Leonardo Maffi.
+  http://leonardo-m.livejournal.com/77079.html
+  
+.fonts/DejaVu+Sans+Mono+for+Powerline.ttf
+  Copyright (c) 2003 by Bitstream
+  https://github.com/Lokaltog/powerline-fonts/tree/master/DejaVuSansMono
+  
+.vim/colors/solarized.vim
+  Copyright 2011 by Ethan Schoonover <es@ethanschoonover.com>
+  Expat License
+  https://github.com/altercation/vim-colors-solarized
