@@ -23,3 +23,8 @@ autocmd BufRead,BufNewFile *.tex map  :w!:!clear; echo Making Postscript % ...
 set cursorline
 let g:solarized_termtrans = 1
 colorscheme solarized
+
+set laststatus=2
+python from powerline.vim import setup as powerline_setup
+python powerline_setup()
+python del powerline_setup

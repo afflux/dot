@@ -57,6 +57,7 @@ if [[ -f ~/.zkbd/$TERM-${DISPLAY:-$VENDOR-$OSTYPE} ]]; then
 	source ~/.zkbd/$TERM-${DISPLAY:-$VENDOR-$OSTYPE}
 else
 	echo "WARNING: Keybindings may not be set correctly!"
+	echo "path is: ~/.zkbd/$TERM-${DISPLAY:-$VENDOR-$OSTYPE}"
 	echo "Execute \`zkbd\` to create bindings."
 fi
 
