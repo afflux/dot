@@ -32,3 +32,4 @@ xterm*scrollKey: true
 
 xterm*faceName:		DejaVu Sans Mono for Powerline-8
 XTerm*termName: xterm-256color
+xterm*bellIsUrgent: true
