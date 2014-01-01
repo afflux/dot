@@ -1,4 +1,5 @@
 " vim:fileformat=unix
+filet plugin indent on
 syntax on
 set background=dark
 set grepprg=grep\ -nH\ $*
