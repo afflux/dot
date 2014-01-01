@@ -1,7 +1,5 @@
 [user]
 	name = Kjell Braden
 	email = afflux@pentabarf.de
-[push]
-	default = simple
 [branch]
 	autosetuprebase = always
