@@ -75,4 +75,4 @@ fi
 [[ -n ${key[C-Left]} ]] && bindkey "${key[C-Left]}" backward-word
 [[ -n ${key[C-Right]} ]] && bindkey "${key[C-Right]}" forward-word
 
-alias grl="git log --oneline"
+alias grl="git log --oneline --graph --decorate"

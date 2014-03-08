@@ -81,7 +81,7 @@ set $SHOWOBJECTIVEC = 1
 # set to 0 to remove display of cpu registers (default is 1)
 set $SHOWCPUREGISTERS = 1
 # set to 1 to enable display of stack (default is 0)
-set $SHOWSTACK = 0
+set $SHOWSTACK = 1
 # set to 1 to enable display of data window (default is 0)
 set $SHOWDATAWIN = 0
 # set to 0 to disable coloured display of changed registers
@@ -95,12 +95,12 @@ set $SKIPSTEP = 1
 # show the ARM opcodes - change to 0 if you don't want such thing (in x/i command)
 set $ARMOPCODES = 1
 # x86 disassembly flavor: 0 for Intel, 1 for AT&T
-set $X86FLAVOR = 1
+set $X86FLAVOR = 0
 # use colorized output or not
 set $USECOLOR = 1
 # to use with remote KDP
 set $KDP64BITS = -1
-set $64BITS = 0
+set $64BITS = 1
 
 set confirm off
 set verbose off
