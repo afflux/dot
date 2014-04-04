@@ -70,12 +70,12 @@
 # __________________gdb options_________________
 
 # set to 1 to have ARM target debugging as default, use the "arm" command to switch inside gdb
-set $ARM = 0
+set $ARM = 1
 # set to 0 if you have problems with the colorized prompt - reported by Plouj with Ubuntu gdb 7.2
-set $COLOUREDPROMPT = 1
-# Colour the first line of the disassembly - default is green, if you want to change it search for
-# SETCOLOUR1STLINE and modify it :-)
-set $SETCOLOUR1STLINE = 0
+set $COLOREDPROMPT = 0
+# color the first line of the disassembly - default is green, if you want to change it search for
+# SETCOLOR1STLINE and modify it :-)
+set $SETCOLOR1STLINE = 0
 # set to 0 to remove display of objectivec messages (default is 1)
 set $SHOWOBJECTIVEC = 1
 # set to 0 to remove display of cpu registers (default is 1)
@@ -84,7 +84,7 @@ set $SHOWCPUREGISTERS = 1
 set $SHOWSTACK = 1
 # set to 1 to enable display of data window (default is 0)
 set $SHOWDATAWIN = 0
-# set to 0 to disable coloured display of changed registers
+# set to 0 to disable colored display of changed registers
 set $SHOWREGCHANGES = 1
 # set to 1 so skip command to execute the instruction at the new location
 # by default it EIP/RIP will be modified and update the new context but not execute the instruction
@@ -93,7 +93,7 @@ set $SKIPEXECUTE = 0
 # 1 = use stepo (do not get into calls), 0 = use stepi (step into calls)
 set $SKIPSTEP = 1
 # show the ARM opcodes - change to 0 if you don't want such thing (in x/i command)
-set $ARMOPCODES = 1
+set $ARMOPCODES = 0
 # x86 disassembly flavor: 0 for Intel, 1 for AT&T
 set $X86FLAVOR = 0
 # use colorized output or not
@@ -104,6 +104,8 @@ set $64BITS = 1
 
 set confirm off
 set verbose off
+set history filename ~/.gdb_history
+set history save
 
 set output-radix 0x10
 set input-radix 0x10
@@ -125,7 +127,7 @@ set $CONTEXTSIZE_CODE  = 8
 # __________________color functions_________________
 #
 # color codes
-set $BLACK = 0
+set $BLACK = 6
 set $RED = 1
 set $GREEN = 2
 set $YELLOW = 3
@@ -144,9 +146,7 @@ set $COLOR_CPUFLAGS = $RED
 
 # this is ugly but there's no else if available :-(
 define color
- if $USECOLOR == 0
-	echo \033[0m
- else
+ if $USECOLOR == 1
  	# BLACK
  	if $arg0 == 0
  		echo \033[30m
@@ -190,20 +190,21 @@ define color
 end
 
 define color_reset
-	echo \033[0m
+    if $USECOLOR == 1
+	   echo \033[0m
+    end
 end
 
 define color_bold
-	echo \033[1m
+    if $USECOLOR == 1
+	   echo \033[1m
+    end
 end
 
 define color_underline
-	echo \033[4m
-end
-
-# can't use the color functions because we are using the set command
-if $COLOUREDPROMPT == 1
-	set prompt \033[31mgdb$ \033[0m
+    if $USECOLOR == 1
+	   echo \033[4m
+    end
 end
 
 # this way anyone can have their custom prompt - argp's idea :-)
@@ -211,7 +212,12 @@ end
 # just remap the color variables defined above
 source ~/.gdbinit.local
 
-# Initialize these variables else comparisons will fail for colouring
+# can't use the color functions because we are using the set command
+if $COLOREDPROMPT == 1
+	set prompt \033[31mgdb$ \033[0m
+end
+
+# Initialize these variables else comparisons will fail for coloring
 # we must initialize all of them at once, 32 and 64 bits, and ARM.
 set $oldrax = 0
 set $oldrbx = 0
@@ -461,7 +467,7 @@ define flagsarm
 # Carry/Borrow/Extend (C), bit 29
 # Overflow (V), bit 28
     # negative/less than (N), bit 31 of CPSR
-    if ($cpsr->n & 1)
+    if (($cpsr >> 0x1f) & 1)
         printf "N "
 	    set $_n_flag = 1
     else
@@ -469,7 +475,7 @@ define flagsarm
 	    set $_n_flag = 0
     end
     # zero (Z), bit 30
-    if ($cpsr->z & 1)
+    if (($cpsr >> 0x1e) & 1)
         printf "Z "
 	    set $_z_flag = 1
     else
@@ -477,7 +483,7 @@ define flagsarm
 	    set $_z_flag = 0
     end
     # Carry/Borrow/Extend (C), bit 29
-    if ($cpsr->c & 1)
+    if (($cpsr >> 0x1d) & 1)
         printf "C "
     	set $_c_flag = 1
     else
@@ -485,7 +491,7 @@ define flagsarm
 	    set $_c_flag = 0
     end
     # Overflow (V), bit 28
-    if ($cpsr->v & 1)
+    if (($cpsr >> 0x1c) & 1)
         printf "V "
         set $_v_flag = 1
     else
@@ -493,7 +499,7 @@ define flagsarm
         set $_v_flag = 0
     end
     # Sticky overflow (Q), bit 27    
-    if ($cpsr->q & 1)
+    if (($cpsr >> 0x1b) & 1)
         printf "Q "
         set $_q_flag = 1
     else
@@ -504,7 +510,7 @@ define flagsarm
     # When T=1:
     # J = 0 The processor is in Thumb state.
     # J = 1 The processor is in ThumbEE state.
-    if ($cpsr->j & 1)
+    if (($cpsr >> 0x18) & 1)
         printf "J "
         set $_j_flag = 1
     else
@@ -512,7 +518,7 @@ define flagsarm
         set $_j_flag = 0
     end
     # Data endianness bit (E), bit 9
-    if ($cpsr->e & 1)
+    if (($cpsr >> 9) & 1)
         printf "E "
         set $_e_flag = 1
     else
@@ -522,7 +528,7 @@ define flagsarm
     # Imprecise abort disable bit (A), bit 8
     # The A bit is set to 1 automatically. It is used to disable imprecise data aborts. 
     # It might not be writable in the Nonsecure state if the AW bit in the SCR register is reset.
-    if ($cpsr->a & 1)
+    if (($cpsr >> 8) & 1)
         printf "A "
         set $_a_flag = 1
     else
@@ -531,7 +537,7 @@ define flagsarm
     end
     # IRQ disable bit (I), bit 7
     # When the I bit is set to 1, IRQ interrupts are disabled.
-    if ($cpsr->i & 1)
+    if (($cpsr >> 7) & 1)
         printf "I "
         set $_i_flag = 1
     else
@@ -541,7 +547,7 @@ define flagsarm
     # FIQ disable bit (F), bit 6
     # When the F bit is set to 1, FIQ interrupts are disabled. 
     # FIQ can be nonmaskable in the Nonsecure state if the FW bit in SCR register is reset.
-    if ($cpsr->f & 1)
+    if (($cpsr >> 6) & 1)
         printf "F "
         set $_f_flag = 1
     else
@@ -550,7 +556,7 @@ define flagsarm
     end
     # Thumb state bit (F), bit 5
     # if 1 then the processor is executing in Thumb state or ThumbEE state depending on the J bit
-    if ($cpsr->t & 1)
+    if (($cpsr >> 5) & 1)
         printf "T "
         set $_t_flag = 1
     else
@@ -654,15 +660,16 @@ end
 
 define eflags
     if $ARM == 1
+        # http://www.heyrick.co.uk/armwiki/The_Status_register
         printf "     N <%d>  Z <%d>  C <%d>  V <%d>",\
-               ($cpsr->n & 1), ($cpsr->z & 1), \
-               ($cpsr->c & 1), ($cpsr->v & 1)
+               (($cpsr >> 0x1f) & 1), (($cpsr >> 0x1e) & 1), \
+               (($cpsr >> 0x1d) & 1), (($cpsr >> 0x1c) & 1)
         printf "  Q <%d>  J <%d>  GE <%d>  E <%d>  A <%d>",\
-               ($cpsr->q & 1), ($cpsr->j & 1),\
-               ($cpsr->ge), ($cpsr->e & 1), ($cpsr->a & 1)
+               (($cpsr >> 0x1b) & 1), (($cpsr >> 0x18) & 1),\
+               (($cpsr >> 0x10) & 7), (($cpsr >> 9) & 1), (($cpsr >> 8) & 1)
         printf "  I <%d>  F <%d>  T <%d> \n",\
-               ($cpsr->i & 1), ($cpsr->f & 1), \
-               ($cpsr->t & 1)
+               (($cpsr >> 7) & 1), (($cpsr >> 6) & 1), \
+               (($cpsr >> 5) & 1)
      else
         printf "     OF <%d>  DF <%d>  IF <%d>  TF <%d>",\
                (((unsigned int)$eflags >> 0xB) & 1), (((unsigned int)$eflags >> 0xA) & 1), \
@@ -1493,11 +1500,16 @@ define ddump
         help ddump
     else
         color $COLOR_SEPARATOR
-        if ($64BITS == 1)
-            printf "[0x%04X:0x%016lX]", $ds, $data_addr
+        if $ARM == 1
+            printf "[0x%08X]", $data_addr
         else
-            printf "[0x%04X:0x%08X]", $ds, $data_addr
+            if ($64BITS == 1)
+                printf "[0x%04X:0x%016lX]", $ds, $data_addr
+            else
+                printf "[0x%04X:0x%08X]", $ds, $data_addr
+            end
         end
+
     	color $COLOR_SEPARATOR
     	printf "------------------------"
         printf "-------------------------------"
@@ -1608,7 +1620,8 @@ define dumpjump
         # 12 bits for any immediate value
         # $_t_flag == 0 => ARM mode
         # $_t_flag == 1 => Thumb or ThumbEE
-        if ($cpsr->t & 1)
+        # State bit (T), bit 5
+        if (($cpsr >> 5) & 1)
             set $_t_flag = 1
         else
             set $_t_flag = 0
@@ -2029,11 +2042,15 @@ define context
     end
     if $SHOWSTACK == 1
     	color $COLOR_SEPARATOR
-		if ($64BITS == 1)
-		    printf "[0x%04X:0x%016lX]", $ss, $rsp
+		if $ARM == 1
+       printf "[0x%08X]", $sp
 		else
-    	    printf "[0x%04X:0x%08X]", $ss, $esp
-    	end
+        if ($64BITS == 1)
+		        printf "[0x%04X:0x%016lX]", $ss, $rsp
+        else
+            printf "[0x%04X:0x%08X]", $ss, $esp
+        end
+    end
         color $COLOR_SEPARATOR
 		printf "-------------------------"
     	printf "-----------------------------"
@@ -2125,17 +2142,19 @@ define context
     color_reset
     set $context_i = $CONTEXTSIZE_CODE
     if ($context_i > 0)
-        if ($SETCOLOUR1STLINE == 1)	
+        if ($SETCOLOR1STLINE == 1)	
 	        color $GREEN
             if ($ARM == 1)
-                x/i $pc | $cpsr.t
+                #       | $cpsr.t (Thumb flag)
+                x/i (unsigned int)$pc | (($cpsr >> 5) & 1)
             else
     	        x/i $pc
             end
 	        color_reset
 	    else
             if ($ARM == 1)
-	    	    x/i $pc | $cpsr.t
+                #       | $cpsr.t (Thumb flag)
+	              x/i (unsigned int)$pc | (($cpsr >> 5) & 1)
             else
                 x/i $pc
             end
@@ -2389,7 +2408,7 @@ define stepoframework
                     set $_nextaddress = $pc + 0x3
                 end
                 # call *0x????????(%ebx) (0xFF93????????) || 
-                if ($_byte2 == 0x93 || $_byte2 == 0x94 || $_byte2 == 0x90 || $_byte2 == 0x92 || $_byte2 == 0x95)
+                if ($_byte2 == 0x93 || $_byte2 == 0x94 || $_byte2 == 0x90 || $_byte2 == 0x92 || $_byte2 == 0x95 || $_byte2 == 0x15)
                     set $_nextaddress = $pc + 6
                 end
                 # call *0x????????(%ebx,%eax,4) (0xFF94??????????)
@@ -3049,6 +3068,58 @@ Syntax: trace_run
 | Log overwrites(!) the file ~/gdb_trace_run.txt.
 end
 
+define entry_point
+	
+	set logging redirect on
+	set logging file /tmp/gdb-entry_point
+	set logging on
+
+	info files
+
+	set logging off
+
+	shell entry_point="$(/usr/bin/grep 'Entry point:' /tmp/gdb-entry_point | /usr/bin/awk '{ print $3 }')"; echo "$entry_point"; echo 'set $entry_point_address = '"$entry_point" > /tmp/gdb-entry_point
+	source /tmp/gdb-entry_point
+    shell /bin/rm -f /tmp/gdb-entry_point
+end
+document entry_point
+Syntax: entry_point
+| Prints the entry point address of the target and stores it in the variable entry_point.
+end
+
+define break_entrypoint
+	entry_point
+	break *$entry_point_address
+end
+document break_entrypoint
+Syntax: break_entrypoint
+| Sets a breakpoint on the entry point of the target.
+end
+
+define objc_symbols
+
+	set logging redirect on
+	set logging file /tmp/gdb-objc_symbols
+	set logging on
+
+	info target
+
+	set logging off
+    # XXX: define paths for objc-symbols and SymTabCreator
+	shell target="$(/usr/bin/head -1 /tmp/gdb-objc_symbols | /usr/bin/head -1 | /usr/bin/awk -F '"' '{ print $2 }')"; objc-symbols "$target" | SymTabCreator -o /tmp/gdb-symtab
+
+	set logging on
+	add-symbol-file /tmp/gdb-symtab
+	set logging off
+    shell /bin/rm -f /tmp/gdb-objc_symbols
+end
+document objc_symbols
+Syntax: objc_symbols
+| Loads stripped objc symbols into gdb using objc-symbols and SymTabCreator
+| See http://stackoverflow.com/questions/17554070/import-class-dump-info-into-gdb
+| and https://github.com/0xced/class-dump/tree/objc-symbols (for the required utils)
+end
+
 #define ptraceme
 #    catch syscall ptrace
 #    commands
@@ -3103,8 +3174,6 @@ define hook-stop
     if $ARM == 1
         if $ARMOPCODES == 1
             set arm show-opcode-bytes 1
-        else
-            set arm show-opcode-bytes 0
         end
     else
         if $X86FLAVOR == 0
@@ -3611,8 +3680,6 @@ end
 define arm
     if $ARMOPCODES == 1
         set arm show-opcode-bytes 1
-    else
-       set arm show-opcode-bytes 1
     end
     set $ARM = 1
 end
@@ -3718,7 +3785,9 @@ define resetkdp
 end
 
 define header
-    if $argc != 0
+    if $argc != 1
+        help header
+    else
         dump memory /tmp/gdbinit_header_dump $arg0 $arg0 + 4096
         shell /usr/bin/otool -h /tmp/gdbinit_header_dump
         shell /bin/rm -f /tmp/gdbinit_header_dump
@@ -3730,7 +3799,9 @@ Syntax: header MACHO_HEADER_START_ADDRESS
 end
 
 define loadcmds
-    if $argc != 0
+    if $argc != 1
+        help loadcmds
+    else
         # this size should be good enough for most binaries
         dump memory /tmp/gdbinit_header_dump $arg0 $arg0 + 4096 * 10
         shell /usr/bin/otool -l /tmp/gdbinit_header_dump
@@ -3740,6 +3811,21 @@ end
 document loadcmds
 Syntax: loadcmds MACHO_HEADER_START_ADDRESS
 | Dump the Mach-O load commands
+end
+
+# defining it here doesn't get the space #$#$%"#!
+define disablecolorprompt
+    set prompt gdb$
+end
+document disablecolorprompt
+| Remove color from prompt
+end
+
+define enablecolorprompt
+    set prompt \033[31mgdb$ \033[0m
+end
+document enablecolorprompt
+| Enable color prompt
 end
 
 #EOF
@@ -3776,10 +3862,10 @@ end
 #    New command is "search"
 #
 #   Version 7.4 (20/06/2011) - fG!
-#    When registers change between instructions the colour will change to red (like it happens in OllyDBG)
+#    When registers change between instructions the color will change to red (like it happens in OllyDBG)
 #     This is the default behavior, if you don't like it, modify the variable SHOWREGCHANGES
 #    Added patch sent by Philippe Langlois
-#     Colour the first disassembly line - change the setting below on SETCOLOUR1STLINE - by default it's disabled
+#     color the first disassembly line - change the setting below on SETCOLOR1STLINE - by default it's disabled
 #
 #	Version 7.3.2 (21/02/2011) - fG!
 #	  Added the command rint3 and modified the int3 command. The new command will restore the byte in previous int3 patch.
@@ -3805,7 +3891,7 @@ end
 #     Added the possibility to modify what's displayed with the context window. You can change default options at the gdb options part. For example, kernel debugging is much slower if the stack display is enabled...
 #     New commands enableobjectivec, enablecpuregisters, enablestack, enabledatawin and their disable equivalents (to support realtime change of default options)
 #     Fixed problem with the assemble command. I was calling /bin/echo which doesn't support the -e option ! DUH ! Should have used bash internal version.
-#     Small fixes to colours...
+#     Small fixes to colors...
 #     New commands enablesolib and disablesolib . Just shortcuts for the stop-on-solib-events fantastic trick ! Hey... I'm lazy ;)
 #     Fixed this: Possible removal of "u" command, info udot is missing in gdb 6.8-debian . Doesn't exist on OS X so bye bye !!!
 #     Displays affected flags in jump decisions
