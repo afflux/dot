@@ -40,6 +40,7 @@ function color_test {   T='gYw';    echo -e "\n    def       40m   41m   42m   4
 export PYTHONDONTWRITEBYTECODE=1
 export EMAIL=afflux@pentabarf.de
 
+export VIRTUAL_ENV_DISABLE_PROMPT=1
 . $HOME/.local/lib/python2.7/site-packages/powerline/bindings/zsh/powerline.zsh
 nocomments () {
 egrep -v '^\s*'$1 $2 | egrep -v  '^ *$'
