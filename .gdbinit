@@ -70,7 +70,7 @@
 # __________________gdb options_________________
 
 # set to 1 to have ARM target debugging as default, use the "arm" command to switch inside gdb
-set $ARM = 1
+set $ARM = 0
 # set to 0 if you have problems with the colorized prompt - reported by Plouj with Ubuntu gdb 7.2
 set $COLOREDPROMPT = 0
 # color the first line of the disassembly - default is green, if you want to change it search for
