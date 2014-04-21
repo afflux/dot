@@ -1,1 +1,5 @@
-[[ -e ~/.profile ]] && emulate sh -c 'source ~/.profile'
+if [[ -e ~/.profile ]] ; then
+	emulate sh
+	. ~/.profile
+	emulate zsh
+fi

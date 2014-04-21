@@ -14,8 +14,18 @@ if [ -d "$HOME/bin" ] ; then
     PATH="$HOME/bin:$PATH"
 fi
 
-if [ -d "$HOME/.local/bin" ] ; then
-    PATH="$HOME/.local/bin:$PATH"
-fi
-
 export EDITOR=vim
+
+OS=`uname -s`
+
+if [ x$OS = xLinux ] ; then
+    if [ -d "$HOME/.local/bin" ] ; then
+        PATH="$HOME/.local/bin:$PATH"
+    fi
+
+    if [ -d "$HOME/py2.7/bin" ] ; then
+        PATH="$HOME/py2.7/bin:$PATH"
+        PYTHONHOME="$HOME/py2.7"
+        export PYTHONHOME
+    fi
+fi
