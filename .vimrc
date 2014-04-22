@@ -4,6 +4,7 @@ syntax on
 set background=dark
 set grepprg=grep\ -nH\ $*
 set modeline 
+set vb
 
 autocmd BufRead,BufNewfile *.asm set ft=gas
 
