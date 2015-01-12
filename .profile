@@ -22,7 +22,7 @@ export EDITOR=vim
 
 OS=`uname -s`
 
-if [ x$OS = xLinux ] ; then
+if [ x$OS != xSunOS ] ; then
     if [ -d "$HOME/.local/bin" ] ; then
         PATH="$HOME/.local/bin:$PATH"
     fi
