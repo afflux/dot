@@ -5,6 +5,7 @@ set background=dark
 set grepprg=grep\ -nH\ $*
 set modeline 
 set vb
+set hlsearch
 
 autocmd BufRead,BufNewfile *.asm set ft=gas
 
