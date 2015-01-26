@@ -1,0 +1,5 @@
+{
+	"groups": {
+		"date":                      { "fg": "solarized:base1", "bg": "solarized:base02", "attrs": [] }
+	}
+}

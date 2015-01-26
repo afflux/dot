@@ -52,6 +52,7 @@ stty 2504:5:bf:8a3b:3:1c:7f:15:4:0:1:0:11:13:1a:ff:12:f:17:16:ff:0:0:0:0:0:0:0:0
 
 stty erase '^?'
 
+bindkey \^U backward-kill-line
 
 autoload zkbd
 if [[ -f ~/.zkbd/$TERM-${DISPLAY:-$VENDOR-$OSTYPE} ]]; then

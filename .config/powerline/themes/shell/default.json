@@ -13,8 +13,7 @@
 				"function": "powerline.segments.common.time.date",
 				"priority": 50,
 				"args": {
-					"format":"%H:%M:%S",
-					"istime":false
+					"format":"%H:%M:%S"
 				}
 			}
 		]
