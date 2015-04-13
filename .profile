@@ -33,3 +33,4 @@ if [ x$OS != xSunOS ] ; then
         export PYTHONHOME
     fi
 fi
+export PATH
