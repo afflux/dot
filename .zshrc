@@ -55,8 +55,8 @@ stty erase '^?'
 bindkey \^U backward-kill-line
 
 autoload zkbd
-if [[ -f ~/.zkbd/$TERM-${DISPLAY:-$VENDOR-$OSTYPE} ]]; then
-	source ~/.zkbd/$TERM-${DISPLAY:-$VENDOR-$OSTYPE}
+if [[ -f ~/.zkbd/$TERM ]]; then
+	source ~/.zkbd/$TERM
 else
 	echo "WARNING: Keybindings may not be set correctly!"
 	echo "path is: ~/.zkbd/$TERM-${DISPLAY:-$VENDOR-$OSTYPE}"
