@@ -5,3 +5,5 @@
 	autosetuprebase = always
 [color]
 	ui = true
+[push]
+	default = simple
