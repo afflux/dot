@@ -30,7 +30,7 @@ xterm*fadeColor:	#002b36
 
 xterm*scrollKey: true
 
-xterm*faceName:		DejaVu Sans Mono for Powerline-8
+xterm*faceName:		DejaVu Sans Mono for Powerline-10
 XTerm*termName: xterm-256color
 xterm*bellIsUrgent: true
 XTerm*toolBar: false
