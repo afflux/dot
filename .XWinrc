@@ -1,0 +1,13 @@
+menu root {
+	xterm exec "xterm"
+	SEPARATOR
+	"View logfile" EXEC "xterm -title $XWINLOGFILE -e less +F $XWINLOGFILE"
+	SEPARATOR
+
+	"Reload .XWinrc"	RELOAD
+	SEParATOR
+}
+
+RootMenu root
+
+SilentExit
