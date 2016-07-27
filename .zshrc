@@ -12,7 +12,7 @@ compinit
 HISTFILE=~/.histfile
 HISTSIZE=1000
 SAVEHIST=1000
-setopt appendhistory extendedglob nomatch
+setopt appendhistory extendedglob nomatch magic_equal_subst
 unsetopt beep
 bindkey -e
 # End of lines configured by zsh-newuser-install
