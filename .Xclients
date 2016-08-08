@@ -1,4 +1,5 @@
 #!/bin/sh
 export LC_ALL=en_US.UTF-8
 setxkbmap us
+powerline-daemon || true
 exec xterm
