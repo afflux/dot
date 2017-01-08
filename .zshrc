@@ -78,3 +78,19 @@ fi
 [[ -n ${key[C-Right]} ]] && bindkey "${key[C-Right]}" forward-word
 
 alias grl="git log --oneline --graph --decorate"
+hashssh () { 
+    for mech in rsa ecdsa dsa; do
+        B="$(awk '{print $2}' /etc/ssh/ssh_host_${mech}_key.pub)"
+        if [ -z "$B" ] ; then
+            continue
+        fi
+        for hash in sha256 md5; do
+            H="$(base64 -d <<<"$B" | ${hash}sum -b | awk '{print $1}')" ;
+            echo -e "\n${mech} ${hash}\n============";
+            # hex
+            fold -w2 <<<"$H" | paste -sd':' -
+            # base64
+            xxd -r -p <<<"$H" | base64
+        done
+    done
+}
