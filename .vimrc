@@ -24,8 +24,8 @@ set number
 "set mouse=a
 autocmd BufRead,BufNewFile *.tex map  :w!:!clear; echo Making Postscript % ...; pdflatex % 
 set cursorline
-let g:solarized_termtrans = 1
-colorscheme solarized
+let base16colorspace=256  " Access colors present in 256 colorspace
+colorscheme base16-default-dark
 
 set laststatus=2
 python from powerline.vim import setup as powerline_setup
