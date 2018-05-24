@@ -57,7 +57,7 @@ export VIRTUAL_ENV_DISABLE_PROMPT=1
 BASE16_SHELL=$HOME/.config/base16-shell/
 [ -n "$PS1" ] && [ -s $BASE16_SHELL/profile_helper.sh ] && eval "$($BASE16_SHELL/profile_helper.sh)"
 
-. $HOME/.local/lib/python2.7/site-packages/powerline/bindings/zsh/powerline.zsh
+. /usr/share/powerline/bindings/zsh/powerline.zsh
 nocomments () {
 egrep -v '^\s*'$1 $2 | egrep -v  '^ *$'
 }
