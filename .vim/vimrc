@@ -39,10 +39,21 @@ if has('gui_win32')
   set backupdir=$VIM/backup//
   set directory=$VIM/swap//
   set undodir=$VIM/undo//
-  let g:tagbar_ctags_bin='$USERPROFILE\cw\usr\local\bin\ctags.exe'
-  set guifont=DejaVu_Sans_Mono:h10
+  set guifont=DejaVu_Sans_Mono_for_Powerline:h10
 endif
 
-nnoremap <C-E> :NERDTreeToggle<CR>
+function! IsNERDTreeOpen()
+  return exists("t:NERDTreeBufName") && (bufwinnr(t:NERDTreeBufName) != -1)
+endfunction
+
+nnoremap <F2> :IndentGuidesToggle<CR>
+nnoremap <F3> :NERDTreeToggle<CR>
+nnoremap <S-F3> :exe IsNERDTreeOpen() ? 'NERDTreeToggle' : 'NERDTreeFind'<CR>
+nnoremap <F4> :set rnu!<CR>
 nnoremap <F8> :TagbarToggle<CR>
 noremap <C-S> :TagbarOpen<CR>:TagbarShowTag<CR>
+
+let s:vimrc_ext = fnamemodify(expand("$MYVIMRC"), ":p:h") . "/vimrc2"
+if filereadable(s:vimrc_ext)
+  execute ":source " . s:vimrc_ext
+endif
