@@ -82,7 +82,6 @@ my-prompt() {
   echo -n "%{%k%}$sub%{%f%}$sp"
 }
 
-#NO_GIT=1
 my-rprompt() {
   local sp="\u00a0" sub="\ue0b2" samesub="\ue0b3" lock="\ue0a2"
   local gitstatus=$(git status --porcelain=v2 --branch --no-ahead-behind 2> /dev/null)
@@ -123,7 +122,7 @@ my-rprompt() {
 }
 setopt PROMPT_SUBST
 PROMPT='$(my-prompt)'
-if [[ -n "$NO_GIT" ]] ; then
+if [[ -e ~/.zsh-no-git ]] ; then
   sub=$(echo -n "\ue0b2")
   sp=$(echo -n "\u00a0")
   RPROMPT="%{%F{236}%}$sub%K{236}%F{250}$sp%*$sp%f%k"
