@@ -84,7 +84,7 @@ my-prompt() {
 
 my-rprompt() {
   local sp="\u00a0" sub="\ue0b2" samesub="\ue0b3" lock="\ue0a2"
-  local gitstatus=$(git status --porcelain=v2 --branch --no-ahead-behind 2> /dev/null)
+  local gitstatus=$(git status --porcelain=v2 --branch 2> /dev/null)
   if [[ -n "$gitstatus" ]]; then
     branch=$(awk '/^# branch.head / { print $3 }' <<<$gitstatus)
     isdirty=$(awk '!/^#/ { count++ } END { print count }' <<<$gitstatus)
