@@ -57,7 +57,80 @@ export VIRTUAL_ENV_DISABLE_PROMPT=1
 BASE16_SHELL=$HOME/.config/base16-shell/
 [ -n "$PS1" ] && [ -s $BASE16_SHELL/profile_helper.sh ] && eval "$($BASE16_SHELL/profile_helper.sh)"
 
-. /usr/share/powerline/bindings/zsh/powerline.zsh
+my-prompt() {
+  local sp="\u00a0" sub="\ue0b0" lock="\ue0a2"
+  echo -n "%{%F{0}%}"
+
+  # ssh host is orange (220 on 166), with lock symbol
+  [[ -n "$SSH_CLIENT" ]] && echo -n "%{%K{166}%}$sub%{%F{220}%}$sp$lock$sp%M$sp%{%F{166}%}"
+
+  # username has blueish background, or red if elevated
+  echo -n "%{%(!.%K{160}.%K{31})%}$sub%{%B%F{231}%}$sp%n$sp%{%b%(!.%F{160}.%F{31})%}"
+
+  # virtual env gets light blueish background (74)
+  [[ -n "$VIRTUAL_ENV" ]] && echo -n "%{%K{74}%}$sub%{%F{231}%}$sp(e)$sp$(basename $VIRTUAL_ENV)$sp%{%F{74}%}"
+
+  # CWD gets gray background (252 on 240)
+  echo -n "%{%K{240}%}$sub%{%F{252}%}$sp%~$sp%{%F{240}%}"
+
+  # return code gets dark red background (52)
+  echo -n "%(?..%{%K{52}%}$sub%{%F{231}%}$sp✘$sp%?$sp%{%F{52}%})"
+
+  # jobs are orange (220 on 166)
+  echo -n "%(1j.%{%K{166}%}$sub%{%F{220}%}$sp%j$sp%{%F{166}%}.)"
+
+  echo -n "%{%k%}$sub%{%f%}$sp"
+}
+
+#NO_GIT=1
+my-rprompt() {
+  local sp="\u00a0" sub="\ue0b2" samesub="\ue0b3" lock="\ue0a2"
+  local gitstatus=$(git status --porcelain=v2 --branch --no-ahead-behind 2> /dev/null)
+  if [[ -n "$gitstatus" ]]; then
+    branch=$(awk '/^# branch.head / { print $3 }' <<<$gitstatus)
+    isdirty=$(awk '!/^#/ { count++ } END { print count }' <<<$gitstatus)
+    numstashs=$(git stash list 2>/dev/null | wc -l)
+  fi
+
+  if [[ -z "$branch" || "$numstashs" -ne 0 || "$isdirty" -eq 0 ]] ; then
+    # gray
+    nextbg=236
+  else
+    # yellow
+    nextbg=172
+  fi
+
+  echo -n "%{%F{$nextbg}%}$sub%{%K{$nextbg}%}$sp"
+
+  if [[ "$numstashs" -ne 0 ]] ; then
+    echo -n "%{%F{220}%}ST$sp$numstashs$sp"
+    if [ "$isdirty" -eq 0 ] ; then
+      echo -n "%{%F{250}%}$samesub$sp"
+    else
+      echo -n "%{%F{172}%}$sub%{%K{172}%}$sp"
+    fi
+  fi
+
+  if [[ -n "$branch" ]] ; then
+    if [ "$isdirty" -eq 0 ] ; then
+      echo -n "$branch$sp$samesub$sp"
+    else
+      echo -n "%{%F{0}%}$branch$sp%{%F{236}%K{172}%}$sub%{%K{236}%}$sp"
+    fi
+  fi
+
+  echo -n "%{%F{250}%}%*$sp%f%k"
+}
+setopt PROMPT_SUBST
+PROMPT='$(my-prompt)'
+if [[ -n "$NO_GIT" ]] ; then
+  sub=$(echo -n "\ue0b2")
+  sp=$(echo -n "\u00a0")
+  RPROMPT="%{%F{236}%}$sub%K{236}%F{250}$sp%*$sp%f%k"
+else
+  RPROMPT='$(my-rprompt)'
+fi
+
 nocomments () {
 egrep -v '^\s*'$1 $2 | egrep -v  '^ *$'
 }
@@ -95,14 +168,16 @@ fi
 
 alias grl="git log --oneline --graph --decorate"
 hashssh () {
-    for mech in rsa ecdsa dsa; do
-        B="$(awk '{print $2}' /etc/ssh/ssh_host_${mech}_key.pub)"
+    for pk in /etc/ssh/ssh_host_*_key.pub; do
+	mech=${pk%_key.pub}
+	mech=${mech#/etc/ssh/ssh_host_}
+        B="$(awk '{print $2}' "$pk")"
         if [ -z "$B" ] ; then
             continue
         fi
         for hash in sha256 md5; do
             H="$(base64 -d <<<"$B" | ${hash}sum -b | awk '{print $1}')" ;
-            echo -e "\n${mech} ${hash}\n============";
+            echo -e "\n${mech} ${hash}\n==============";
             # hex
             fold -w2 <<<"$H" | paste -sd':' -
             # base64
