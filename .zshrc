@@ -59,13 +59,14 @@ BASE16_SHELL=$HOME/.config/base16-shell/
 
 my-prompt() {
   local sp="\u00a0" sub="\ue0b0" lock="\ue0a2"
-  echo -n "%{%F{0}%}"
 
   # ssh host is orange (220 on 166), with lock symbol
-  [[ -n "$SSH_CLIENT" ]] && echo -n "%{%K{166}%}$sub%{%F{220}%}$sp$lock$sp%M$sp%{%F{166}%}"
+  [[ -n "$SSH_CLIENT" ]] && echo -n "%{%K{166}%F{220}%}$sp$lock$sp%M$sp%{%F{166}%}"
 
   # username has blueish background, or red if elevated
-  echo -n "%{%(!.%K{160}.%K{31})%}$sub%{%B%F{231}%}$sp%n$sp%{%b%(!.%F{160}.%F{31})%}"
+  echo -n "%{%(!.%K{160}.%K{31})%}"
+  [[ -n "$SSH_CLIENT" ]] && echo -n "$sub"
+  echo -n "%{%B%F{231}%}$sp%n$sp%{%b%(!.%F{160}.%F{31})%}"
 
   # virtual env gets light blueish background (74)
   [[ -n "$VIRTUAL_ENV" ]] && echo -n "%{%K{74}%}$sub%{%F{231}%}$sp(e)$sp$(basename $VIRTUAL_ENV)$sp%{%F{74}%}"
