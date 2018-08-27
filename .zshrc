@@ -12,7 +12,7 @@ compinit
 HISTFILE=~/.histfile
 HISTSIZE=1000
 SAVEHIST=1000
-setopt appendhistory extendedglob nomatch magic_equal_subst
+setopt appendhistory extendedglob nomatch magic_equal_subst interactivecomments
 unsetopt beep
 bindkey -e
 # End of lines configured by zsh-newuser-install
@@ -185,6 +185,10 @@ hashssh () {
         done
     done
 }
+[ -r ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh ] && source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
+[ -r /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ] && source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets)
+
 # disable flow control on stty, so CTRL-S can be used
 stty -ixon
 # freeze TTY, so shell will restore after processes went mad. stty will stop working!
