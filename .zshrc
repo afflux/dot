@@ -113,7 +113,7 @@ my-rprompt() {
 
   if [[ -n "$branch" ]] ; then
     if [ "$isdirty" -eq 0 ] ; then
-      echo -n "$branch$sp$samesub$sp"
+      echo -n "%{%F{250}%}$branch$sp$samesub$sp"
     else
       echo -n "%{%F{0}%}$branch$sp%{%F{236}%K{172}%}$sub%{%K{236}%}$sp"
     fi
