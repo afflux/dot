@@ -284,7 +284,7 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey,           }, "Return", function () awful.spawn(terminal) end,
               {description = "open a terminal", group = "launcher"}),
     awful.key({ "Control", "Mod1" }, "l", function () awful.spawn('loginctl lock-session') end, {description = "lock screen", group = "session"}), -- changed @afflux
-    awful.key({ "Control", "Mod1" }, "Delete", function () awful.spawn('lxsession-logout') end, {description = "logout dialog", group = "session"}), -- changed @afflux
+    awful.key({ "Control", "Mod1" }, "Delete", function () awful.spawn('lxqt-leave') end, {description = "logout dialog", group = "session"}), -- changed @afflux
     awful.key({ modkey, "Control" }, "r", awesome.restart,
               {description = "reload awesome", group = "awesome"}),
     awful.key({ modkey, "Shift"   }, "q", awesome.quit,

@@ -1,0 +1,6 @@
+[Desktop Entry]
+Exec=xss-lock -v -- lxqt-leave --lockscreen
+Name=XSS-Lock
+OnlyShowIn=LXQt;
+Type=Application
+Version=1.0
