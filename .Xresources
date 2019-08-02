@@ -10,5 +10,6 @@ xterm*faceName:		DejaVu Sans Mono for Powerline-10
 XTerm*termName: xterm-256color
 xterm*bellIsUrgent: true
 XTerm*toolBar: false
+XTerm*selectToClipboard: true
 
 xscreensaver.fade: False
