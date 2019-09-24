@@ -11,5 +11,6 @@ XTerm*termName: xterm-256color
 xterm*bellIsUrgent: true
 XTerm*toolBar: false
 XTerm*selectToClipboard: true
+XTerm*fullscreen: never
 
 xscreensaver.fade: False
