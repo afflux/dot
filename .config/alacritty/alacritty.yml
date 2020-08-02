@@ -8,3 +8,8 @@ font:
 selection:
   save_to_clipboard: true
   semantic_escape_chars: ",│`|:\"' ()[]{}<>\t\u00a0"
+
+mouse_bindings:
+  - { mouse: Middle, action: Paste }
+key_bindings:
+  - { key: Insert, mods: Shift, action: Paste }
