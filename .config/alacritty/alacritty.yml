@@ -1,0 +1,10 @@
+window:
+  dynamic_title: true
+font:
+  size: 10
+  normal:
+    family: DejaVu Sans Mono for Powerline
+
+selection:
+  save_to_clipboard: true
+  semantic_escape_chars: ",│`|:\"' ()[]{}<>\t\u00a0"
