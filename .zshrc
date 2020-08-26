@@ -193,3 +193,7 @@ ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets)
 stty -ixon
 # freeze TTY, so shell will restore after processes went mad. stty will stop working!
 ttyctl -f
+
+unset SSH_AGENT_PID
+export SSH_AUTH_SOCK="$(gpgconf --list-dirs agent-ssh-socket)"
+precmd () { print -Pn "\e]0;$PWD\a" }
