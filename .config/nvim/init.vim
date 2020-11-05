@@ -4,6 +4,7 @@ execute pathogen#infect()
 set hidden
 ", 'tcp://127.0.0.1:2087'
 let g:LanguageClient_serverCommands = {
+    \ 'rust': ['~/.cargo/bin/rustup', 'run', 'stable', 'rls'],
     \ 'python': ['/home/kb/apps/pls-venv/bin/pyls'],
     \ }
 
@@ -22,14 +23,18 @@ function! LanguageClientMaps()
         setl formatexpr=LanguageClient#textDocument_rangeFormatting()
 	set completefunc=LanguageClient#complete
     endif
-    nnoremap <buffer> <silent> <F5> :call LanguageClient_contextMenu()<CR>
-    nnoremap <leader>ld :call LanguageClient#textDocument_definition()<CR>
-    nnoremap <leader>lr :call LanguageClient#textDocument_rename()<CR>
-    nnoremap <leader>lf :call LanguageClient#textDocument_formatting()<CR>
-    nnoremap <leader>lt :call LanguageClient#textDocument_typeDefinition()<CR>
-    nnoremap <leader>lx :call LanguageClient#textDocument_references()<CR>
-    nnoremap <leader>la :call LanguageClient_workspace_applyEdit()<CR>
-    nnoremap <leader>lh :call LanguageClient#textDocument_hover()<CR>
+    nmap <silent> <F5> <Plug>(lcn-menu)
+    vmap <silent> <F5> <Plug>(lcn-menu)
+    nmap <leader>ld <Plug>(lcn-definition)
+    nmap <leader>lr <Plug>(lcn-rename)
+    nmap <leader>lf <Plug>(lcn-format)
+    nmap <leader>lt <Plug>(lcn-type-definition)
+    nmap <leader>lx <Plug>(lcn-references)
+    nmap <silent> <leader>le <Plug>(lcn-explain-error)
+    nmap <silent> <leader>la <Plug>(lcn-code-action)
+    vmap <silent> <leader>la <Plug>(lcn-code-action)
+    nmap <silent> <leader>lh <Plug>(lcn-hover)
+    "nnoremap <leader>la :call LanguageClient_workspace_applyEdit()<CR>
 endfunction
 
 set cmdheight=2
@@ -40,7 +45,7 @@ noremap <Leader>c :ccl <bar> lcl <bar> pclose<CR>
 "let g:LanguageClient_hoverPreview = 'always'
 "
 let g:LanguageClient_loadSettings = 1
-let g:LanguageClient_settingsPath = expand('<sfile>:p:h') . '/settings.json'
+let g:LanguageClient_settingsPath = [ expand('<sfile>:p:h') . '/settings.json', '.lsp.json' ]
 let g:LanguageClient_changeThrottle = 2
 
 augroup LanguageClient_config
@@ -87,8 +92,9 @@ endfunction
 
 nnoremap <F3> :NERDTreeToggle<CR>
 nnoremap <S-F3> :exe IsNERDTreeOpen() ? 'NERDTreeToggle' : 'NERDTreeFind'<CR>
+nnoremap <F15> :exe IsNERDTreeOpen() ? 'NERDTreeToggle' : 'NERDTreeFind'<CR>
 nnoremap <F4> :set rnu!<CR>
-nnoremap <S-F4> :IndentGuidesToggle<CR>
+nnoremap <F16> :IndentGuidesToggle<CR>
 nnoremap <F8> :TagbarToggle<CR>
 noremap <C-S> :TagbarOpen<CR>:TagbarShowTag<CR>
 
@@ -103,3 +109,12 @@ endif
 
 set mouse=vn
 set clipboard=unnamedplus
+
+noremap <M-LeftMouse> <4-LeftMouse>
+inoremap <M-LeftMouse> <4-LeftMouse>
+onoremap <M-LeftMouse> <C-C><4-LeftMouse>
+noremap <M-LeftDrag> <LeftDrag>
+inoremap <M-LeftDrag> <LeftDrag>
+onoremap <M-LeftDrag> <C-C><LeftDrag>
+
+set title titleold=
