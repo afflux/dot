@@ -61,8 +61,9 @@ augroup END
 
 let g:deoplete#enable_at_startup = 1
 " coloring
-let base16colorspace=256  " Access colors present in 256 colorspace
-colorscheme base16-solarized-dark
+set termguicolors
+let g:gruvbox_italic=1
+colorscheme gruvbox
 set number
 set cursorline
 

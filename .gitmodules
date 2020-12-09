@@ -52,3 +52,6 @@
 [submodule ".config/nvim/bundle/vim-surround"]
 	path = .config/nvim/bundle/vim-surround
 	url = https://github.com/tpope/vim-surround
+[submodule ".config/nvim/bundle/gruvbox"]
+	path = .config/nvim/bundle/gruvbox
+	url = https://github.com/morhetz/gruvbox

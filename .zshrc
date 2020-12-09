@@ -54,22 +54,20 @@ export EMAIL=afflux@pentabarf.de
 
 export VIRTUAL_ENV_DISABLE_PROMPT=1
 
-BASE16_SHELL=$HOME/.config/base16-shell/
-[ -n "$PS1" ] && [ -s $BASE16_SHELL/profile_helper.sh ] && eval "$($BASE16_SHELL/profile_helper.sh)"
 
 my-prompt() {
   local sp="\u00a0" sub="\ue0b0" lock="\ue0a2"
 
-  # ssh host is orange (220 on 166), with lock symbol
-  [[ -n "$SSH_CLIENT" ]] && echo -n "%{%K{166}%F{220}%}$sp$lock$sp%M$sp%{%F{166}%}"
+  # ssh host is white (15) on yellow (3), with lock symbol
+  [[ -n "$SSH_CLIENT" ]] && echo -n "%{%K{3}%F{15}%}$sp$lock$sp%M$sp%{%F{3}%}"
 
-  # username has blueish background, or red if elevated
-  echo -n "%{%(!.%K{160}.%K{31})%}"
+  # username has light blueish (12) background, or red if elevated
+  echo -n "%{%(!.%K{160}.%K{12})%}"
   [[ -n "$SSH_CLIENT" ]] && echo -n "$sub"
-  echo -n "%{%B%F{231}%}$sp%n$sp%{%b%(!.%F{160}.%F{31})%}"
+  echo -n "%{%B%F{231}%}$sp%n$sp%{%b%(!.%F{160}.%F{12})%}"
 
-  # virtual env gets light blueish background (74)
-  [[ -n "$VIRTUAL_ENV" ]] && echo -n "%{%K{74}%}$sub%{%F{231}%}$sp(e)$sp$(basename $VIRTUAL_ENV)$sp%{%F{74}%}"
+  # virtual env gets dark blueish background (4)
+  [[ -n "$VIRTUAL_ENV" ]] && echo -n "%{%K{4}%}$sub%{%F{231}%}$sp(e)$sp$(basename $VIRTUAL_ENV)$sp%{%F{4}%}"
 
   # CWD gets gray background (252 on 240)
   echo -n "%{%K{240}%}$sub%{%F{252}%}$sp%~$sp%{%F{240}%}"
@@ -77,8 +75,8 @@ my-prompt() {
   # return code gets dark red background (52)
   echo -n "%(?..%{%K{52}%}$sub%{%F{231}%}$sp✘$sp%?$sp%{%F{52}%})"
 
-  # jobs are orange (220 on 166)
-  echo -n "%(1j.%{%K{166}%}$sub%{%F{220}%}$sp%j$sp%{%F{166}%}.)"
+  # jobs are white (15) on yellow (3)
+  echo -n "%(1j.%{%K{3}%}$sub%{%F{15}%}$sp%j$sp%{%F{3}%}.)"
 
   echo -n "%{%k%}$sub%{%f%}$sp"
 }
@@ -97,17 +95,17 @@ my-rprompt() {
     nextbg=236
   else
     # yellow
-    nextbg=172
+    nextbg=3
   fi
 
   echo -n "%{%F{$nextbg}%}$sub%{%K{$nextbg}%}$sp"
 
   if [[ "$numstashs" -ne 0 ]] ; then
-    echo -n "%{%F{220}%}ST$sp$numstashs$sp"
+    echo -n "%{%F{3}%}ST$sp$numstashs$sp"
     if [ "$isdirty" -eq 0 ] ; then
       echo -n "%{%F{250}%}$samesub$sp"
     else
-      echo -n "%{%F{172}%}$sub%{%K{172}%}$sp"
+      echo -n "%{%F{3}%}$sub%{%K{3}%}$sp"
     fi
   fi
 
@@ -115,7 +113,7 @@ my-rprompt() {
     if [ "$isdirty" -eq 0 ] ; then
       echo -n "%{%F{250}%}$branch$sp$samesub$sp"
     else
-      echo -n "%{%F{0}%}$branch$sp%{%F{236}%K{172}%}$sub%{%K{236}%}$sp"
+      echo -n "%{%F{0}%}$branch$sp%{%F{236}%K{3}%}$sub%{%K{236}%}$sp"
     fi
   fi
 
@@ -132,7 +130,7 @@ else
 fi
 
 nocomments () {
-egrep -v '^\s*'$1 $2 | egrep -v  '^ *$'
+egrep -v '^\s*'$1 $2 | egrep -v  '^\s*$'
 }
 
 defaultstty () {
@@ -185,9 +183,6 @@ hashssh () {
         done
     done
 }
-[ -r ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh ] && source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
-[ -r /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ] && source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets)
 
 # disable flow control on stty, so CTRL-S can be used
 stty -ixon
@@ -197,3 +192,8 @@ ttyctl -f
 unset SSH_AGENT_PID
 export SSH_AUTH_SOCK="$(gpgconf --list-dirs agent-ssh-socket)"
 precmd () { print -Pn "\e]0;$PWD\a" }
+
+[ -r ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh ] && source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
+ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets)
+ZSH_AUTOSUGGEST_USE_ASYNC=1
+[ -r /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ] && source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
