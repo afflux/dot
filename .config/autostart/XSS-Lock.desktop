@@ -1,5 +1,5 @@
 [Desktop Entry]
-Exec=xss-lock -v -- xdg-screensaver lock
+Exec=xss-lock -v -- slock
 Name=XSS-Lock
 OnlyShowIn=LXQt;
 Type=Application
