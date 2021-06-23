@@ -9,8 +9,3 @@
   manually patched with U+E0A0-U+E0B3 from the powerline-symbols.sfd
   and U+2460-U+24FF using DroidSans Fallback
   with https://github.com/Lokaltog/powerline-fontpatcher
-  
-.vim/colors/solarized.vim
-  Copyright 2011 by Ethan Schoonover <es@ethanschoonover.com>
-  Expat License
-  https://github.com/altercation/vim-colors-solarized
