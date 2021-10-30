@@ -13,6 +13,7 @@ mouse_bindings:
   - { mouse: Middle, action: Paste }
 key_bindings:
   - { key: Insert, mods: Shift, action: Paste }
+  - { key: Return, mods: Alt, action: ReceiveChar }
 
 mouse:
   hide_when_typing: true
