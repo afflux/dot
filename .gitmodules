@@ -10,9 +10,6 @@
 [submodule ".config/nvim/bundle/echodoc.vim"]
 	path = .config/nvim/bundle/echodoc.vim
 	url = https://github.com/Shougo/echodoc.vim
-[submodule ".config/nvim/bundle/LanguageClient-neovim"]
-	path = .config/nvim/bundle/LanguageClient-neovim
-	url = https://github.com/autozimu/LanguageClient-neovim.git
 [submodule ".config/nvim/bundle/nerdtree"]
 	path = .config/nvim/bundle/nerdtree
 	url = https://github.com/scrooloose/nerdtree
