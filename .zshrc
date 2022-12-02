@@ -167,8 +167,8 @@ fi
 alias grl="git log --oneline --graph --decorate"
 hashssh () {
     for pk in /etc/ssh/ssh_host_*_key.pub; do
-	mech=${pk%_key.pub}
-	mech=${mech#/etc/ssh/ssh_host_}
+        mech=${pk%_key.pub}
+        mech=${mech#/etc/ssh/ssh_host_}
         B="$(awk '{print $2}' "$pk")"
         if [ -z "$B" ] ; then
             continue
@@ -179,7 +179,7 @@ hashssh () {
             # hex
             fold -w2 <<<"$H" | paste -sd':' -
             # base64
-            xxd -r -p <<<"$H" | base64
+            echo ${(U)hash}:$(xxd -r -p <<<"$H" | base64 | sed 's/=\+$//')
         done
     done
 }
