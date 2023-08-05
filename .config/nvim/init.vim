@@ -76,8 +76,7 @@ endif
 
 set mouse=vn
 
-" not sure why tmux copy integration doesn't work in 0.4 🤷
-if (!has('nvim-0.6') || empty($TMUX)) && empty($WAYLAND_DISPLAY) && empty($DISPLAY) && !has('win32')
+if empty($WAYLAND_DISPLAY) && empty($DISPLAY) && !has('win32')
   " I'd prefer to use ojroques/nvim-osc52 over ojroques/vim-oscyank but it requires
   " neovim >= 0.6 (debian bookworm+ or ubuntu 22.04+)
   autocmd TextYankPost *
