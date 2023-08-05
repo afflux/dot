@@ -24,6 +24,7 @@ endif
 
 set cmdheight=2
 let g:echodoc#enable_at_startup = 1
+let g:oscyank_silent = 1
 "let g:echodoc#type = 'signature'
 
 noremap <Leader>c :ccl <bar> lcl <bar> pclose<CR>
@@ -81,7 +82,7 @@ if empty($WAYLAND_DISPLAY) && empty($DISPLAY) && !has('win32')
   " neovim >= 0.6 (debian bookworm+ or ubuntu 22.04+)
   autocmd TextYankPost *
       \ if v:event.operator is 'y' && (v:event.regname is '+' || v:event.regname is '') |
-      \ execute 'OSCYankRegister +' |
+      \ execute 'OSCYankRegister ' . v:event.regname |
       \ endif
 else
   set clipboard=unnamedplus
