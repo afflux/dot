@@ -65,7 +65,18 @@ if maparg('<C-L>', 'n') ==# ''
 endif
 
 set mouse=vn
-set clipboard=unnamedplus
+
+" not sure why tmux copy integration doesn't work in 0.4 🤷
+if (!has('nvim-0.6') || empty($TMUX)) && empty($WAYLAND_DISPLAY) && empty($DISPLAY) && !has('win32')
+  " I'd prefer to use ojroques/nvim-osc52 over ojroques/vim-oscyank but it requires
+  " neovim >= 0.6 (debian bookworm+ or ubuntu 22.04+)
+  autocmd TextYankPost *
+      \ if v:event.operator is 'y' && (v:event.regname is '+' || v:event.regname is '') |
+      \ execute 'OSCYankRegister +' |
+      \ endif
+else
+  set clipboard=unnamedplus
+endif
 
 noremap <M-LeftMouse> <4-LeftMouse>
 inoremap <M-LeftMouse> <4-LeftMouse>
@@ -76,9 +87,3 @@ onoremap <M-LeftDrag> <C-C><LeftDrag>
 
 set title titleold=
 
-" I'd prefer to use ojroques/nvim-osc52 over ojroques/vim-oscyank but it
-" requires neovim >= 0.6 (debian bookworm+ or ubuntu 22.04+)
-autocmd TextYankPost *
-    \ if v:event.operator is 'y' && v:event.regname is '+' |
-    \ execute 'OSCYankRegister +' |
-    \ endif
