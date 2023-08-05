@@ -1,15 +1,25 @@
 " vim:fileformat=unix
 
-call plug#begin()
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-Plug 'Shougo/echodoc.vim'
-Plug 'preservim/nerdtree'
-Plug 'preservim/tagbar'
-Plug 'vim-airline/vim-airline'
-Plug 'tpope/vim-surround'
-Plug 'morhetz/gruvbox'
-Plug 'ojroques/vim-oscyank', {'branch': 'main'}
-call plug#end()
+let s:cache_dir = expand('~/.cache')
+if &runtimepath !~# '/dein.vim'
+  let s:dein_dir = s:cache_dir . '/dein/repos/github.com/Shougo/dein.vim'
+  if !isdirectory(s:dein_dir)
+    execute '!git clone --branch=3.1 --depth=1 https://github.com/Shougo/dein.vim' s:dein_dir
+  endif
+  execute 'set runtimepath^=' . substitute(
+        \ fnamemodify(s:dein_dir, ':p') , '[/\\]$', '', '')
+
+  call dein#begin(s:cache_dir . '/dein')
+  call dein#add('Shougo/deoplete.nvim')
+  call dein#add('Shougo/echodoc.vim')
+  call dein#add('preservim/nerdtree')
+  call dein#add('preservim/tagbar')
+  call dein#add('vim-airline/vim-airline')
+  call dein#add('tpope/vim-surround')
+  call dein#add('morhetz/gruvbox')
+  call dein#add('ojroques/vim-oscyank', {'rev': 'main'})
+  call dein#end()
+endif
 
 
 set cmdheight=2
