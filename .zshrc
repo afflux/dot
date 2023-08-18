@@ -54,16 +54,20 @@ export EMAIL=afflux@pentabarf.de
 
 export VIRTUAL_ENV_DISABLE_PROMPT=1
 
+if [[ -e ~/.zsh-show-hostname || -n "$SSH_CLIENT" ]] ; then
+  zsh_show_hostname=1
+fi
+
 
 my-prompt() {
   local sp="\u00a0" sub="\ue0b0" lock="\ue0a2"
 
   # ssh host is white (15) on yellow (3), with lock symbol
-  [[ -n "$SSH_CLIENT" ]] && echo -n "%{%K{3}%F{15}%}$sp$lock$sp%M$sp%{%F{3}%}"
+  [[ -n "$zsh_show_hostname" ]] && echo -n "%{%K{3}%F{15}%}$sp$lock$sp%M$sp%{%F{3}%}"
 
   # username has light blueish (12) background, or red if elevated
   echo -n "%{%(!.%K{160}.%K{12})%}"
-  [[ -n "$SSH_CLIENT" ]] && echo -n "$sub"
+  [[ -n "$zsh_show_hostname" ]] && echo -n "$sub"
   echo -n "%{%B%F{231}%}$sp%n$sp%{%b%(!.%F{160}.%F{12})%}"
 
   # virtual env gets dark blueish background (4)
