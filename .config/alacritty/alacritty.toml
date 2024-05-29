@@ -1,0 +1,69 @@
+[colors]
+draw_bold_text_with_bright_colors = false
+
+[colors.bright]
+black = "#928374"
+blue = "#83a598"
+cyan = "#8ec07c"
+green = "#b8bb26"
+magenta = "#d3869b"
+red = "#fb4934"
+white = "#ebdbb2"
+yellow = "#fabd2f"
+
+[colors.normal]
+black = "#282828"
+blue = "#458588"
+cyan = "#689d6a"
+green = "#98971a"
+magenta = "#b16286"
+red = "#cc241d"
+white = "#a89984"
+yellow = "#d79921"
+
+[colors.primary]
+background = "#282828"
+foreground = "#ebdbb2"
+
+[font]
+size = 10
+
+[font.normal]
+family = "DejaVuSansM Nerd Font Mono"
+
+[[hints.enabled]]
+command = "xdg-open"
+post_processing = true
+regex = "(mailto:|https:|http:|file:|git:|ssh:|ftp:)[^\u0000-\u001F\u007F-<>\"\\s{-}\\^⟨⟩`]+"
+
+[hints.enabled.binding]
+key = "U"
+mods = "Control|Shift"
+
+[hints.enabled.mouse]
+enabled = true
+mods = "Control"
+
+[[keyboard.bindings]]
+action = "Paste"
+key = "Insert"
+mods = "Shift"
+
+[[keyboard.bindings]]
+action = "ReceiveChar"
+key = "Return"
+mods = "Alt"
+
+[mouse]
+hide_when_typing = true
+
+[[mouse.bindings]]
+action = "Paste"
+mouse = "Middle"
+
+[selection]
+save_to_clipboard = true
+semantic_escape_chars = ",│`|\"' ()[]{}<>\t "
+
+[window]
+dynamic_title = true
