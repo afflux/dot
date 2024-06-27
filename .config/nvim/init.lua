@@ -70,7 +70,65 @@ require("lazy").setup({
     },
     dependencies = { 'nvim-tree/nvim-web-devicons' }
   },
+  {
+    "neovim/nvim-lspconfig", -- REQUIRED: for native Neovim LSP integration
+    lazy = false, -- REQUIRED: tell lazy.nvim to start this plugin at startup
+    dependencies = {
+      -- main one
+      { "ms-jpq/coq_nvim", branch = "coq" },
 
+      -- 9000+ Snippets
+      { "ms-jpq/coq.artifacts", branch = "artifacts" },
+    },
+    init = function()
+      vim.g.coq_settings = {
+          auto_start = "shut-up", -- if you want to start COQ at startup
+          -- Your COQ settings here
+      }
+    end,
+    config = function()
+      -- Your LSP settings here
+      require'lspconfig'.rust_analyzer.setup{}
+      require'lspconfig'.ruff.setup{}
+      -- TODO add lsp keybindings
+      vim.api.nvim_create_autocmd('LspAttach', {
+        callback = function(ev)
+            vim.bo[ev.buf].omnifunc = 'v:lua.vim.lsp.omnifunc'
+
+            local bufopts = function(desc)
+                return { noremap = true, silent = true, buffer = ev.buf, desc = desc }
+            end
+            vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, bufopts('Go to Declaration'))
+            vim.keymap.set('n', 'gd', vim.lsp.buf.definition, bufopts('Go to Definition'))
+            vim.keymap.set('n', 'K', vim.lsp.buf.hover, bufopts('Hover'))
+            vim.keymap.set('n', 'gI', vim.lsp.buf.implementation, bufopts('Go to Implementation'))
+            vim.keymap.set('n', '<Leader>k', vim.lsp.buf.signature_help, bufopts('Singature Help'))
+            vim.keymap.set('n', '<Leader>wa', vim.lsp.buf.add_workspace_folder, bufopts('Add Workspace Folder'))
+            vim.keymap.set('n', '<Leader>wr', vim.lsp.buf.remove_workspace_folder, bufopts('Remove Workspace Folder'))
+            vim.keymap.set('n', '<Leader>wl', function()
+                print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
+            end, bufopts('List Workspace Folder'))
+            vim.keymap.set('n', '<Leader>t', vim.lsp.buf.type_definition, bufopts('Type Definition'))
+            vim.keymap.set('n', '<Leader>r', vim.lsp.buf.rename, bufopts('Rename with LSP'))
+            vim.keymap.set({ 'n', 'v' }, '<Leader>p', vim.lsp.buf.code_action, bufopts('Code Action'))
+            vim.keymap.set('n', 'gR', vim.lsp.buf.references, bufopts('Go to Reference'))
+            vim.keymap.set('n', '<Leader>f', function() vim.lsp.buf.format({ async = true }) end, bufopts('Formatting with LSP'))
+
+            -- Get client
+            local client = vim.lsp.get_client_by_id(ev.data.client_id)
+
+            -- ╭─────────────╮
+            -- │ INLAY HINTS │
+            -- ╰─────────────╯
+            if client.server_capabilities.inlayHintProvider then
+                vim.lsp.inlay_hint.enable(true)
+            else
+                vim.lsp.inlay_hint.enable(false)
+            end
+        end,
+    })
+    end,
+  }
 }, opts)
 
 
