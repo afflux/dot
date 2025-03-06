@@ -23,6 +23,8 @@ zstyle ':completion:*' matcher-list '' 'm:{[:lower:]}={[:upper:]}' 'r:|[._-]=* r
 zstyle :compinstall filename '/home/k/.zshrc'
 
 autoload -Uz compinit
+
+fpath=( ~/.local/share/zsh/site-functions/ "${fpath[@]}" )
 compinit
 
 # End of lines added by compinstall
