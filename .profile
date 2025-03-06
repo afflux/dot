@@ -20,17 +20,16 @@ fi
 
 export EDITOR=vim
 
-OS=`uname -s`
-
-if [ x$OS != xSunOS ] ; then
-    if [ -d "$HOME/.local/bin" ] ; then
-        PATH="$HOME/.local/bin:$PATH"
-    fi
-
-    if [ -d "$HOME/py2.7/bin" ] ; then
-        PATH="$HOME/py2.7/bin:$PATH"
-        PYTHONHOME="$HOME/py2.7"
-        export PYTHONHOME
-    fi
+if [ -d "$HOME/.local/bin" ] ; then
+    PATH="$HOME/.local/bin:$PATH"
 fi
+
+if [ -d "$HOME/apps/nvim-linux64/bin" ] ; then
+    PATH="$HOME/apps/nvim-linux64/bin:$PATH"
+fi
+
+if [ -d "$HOME/.cargo/bin" ] ; then
+    PATH="$HOME/.cargo/bin:$PATH"
+fi
+
 export PATH

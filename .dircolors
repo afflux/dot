@@ -289,3 +289,7 @@ STICKY 44 # dir with the sticky bit set (+t) and not other-writable
 
 *README 1;4;37
 *TODO 1;4;37
+
+*CMakeLists.txt 1;4;37
+*Makefile 1;4;37
+*makefile 1;4;37
