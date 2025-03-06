@@ -141,9 +141,10 @@ vim.api.nvim_create_autocmd({"BufReadPost"}, {
     end
 })
 
--- smaller-than-default file browser window
-vim.g.netrw_winsize = 25
+-- smaller-than-default file browser window, minus for absolute column width
+vim.g.netrw_winsize = -40
 
+vim.o.foldlevel = 9999
 vim.o.cmdheight = 2
 vim.o.termguicolors = true
 vim.o.number = true
@@ -186,8 +187,39 @@ vim.keymap.set({"i", "n", "v"}, "<M-LeftDrag>", "<4-LeftDrag>", {noremap = true}
 vim.keymap.set("o", "<M-LeftDrag>", "<C-C><4-LeftDrag>", {noremap = true})
 
 vim.keymap.set("n", "<F4>", function() vim.o.relativenumber = not(vim.o.relativenumber) end, {noremap = true})
+
+-- close quickfix / location / preview windows
+vim.keymap.set("n", "<Leader>c", ":cclose | lclose | pclose | AerialCloseAll<CR>", {noremap = true})
+
 -- open netrw explorer on F3
-vim.keymap.set("n", "<F3>", ":Lexplore<CR>", {noremap = true})
+vim.g.netrw_liststyle = 3
+vim.keymap.set('n', '<F3>', function()
+  for _, window in ipairs(vim.api.nvim_list_wins()) do
+    if vim.api.nvim_get_option_value("filetype", {buf = vim.fn.winbufnr(window)}) == "netrw" then
+      vim.api.nvim_win_close(window, false)
+      return
+    end
+  end
+
+  vim.cmd(":Lexplore")
+end,
+  {noremap = true})
+
+vim.keymap.set('n', '<S-F3>', function()
+  for _, window in ipairs(vim.api.nvim_list_wins()) do
+    if vim.api.nvim_get_option_value("filetype", {buf = vim.fn.winbufnr(window)}) == "netrw" then
+      vim.api.nvim_win_close(window, false)
+      return
+    end
+  end
+
+  local dir = vim.fn.expand("%:p:h")
+  vim.fn.setreg("/", vim.fn.expand("%:t"))
+  vim.cmd(":Lexplore " .. dir)
+  vim.cmd(":silent normal n<CR>zz")
+end,
+  {noremap = true})
 
 -- revert to old behavior - always open the edit conflict dialog
 vim.api.nvim_clear_autocmds({group = "nvim_swapfile"})
+-- vim:ts=2:sts=2:sw=2:et
