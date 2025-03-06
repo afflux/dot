@@ -154,24 +154,14 @@ vim.o.mouse = "vn"
 vim.o.title = true
 vim.o.titleold = ""
 
--- disable search highlight if moved away
-vim.api.nvim_create_autocmd('CursorMoved', {
-  group = vim.api.nvim_create_augroup('auto-hlsearch', { clear = true }),
-  callback = function ()
-    if vim.v.hlsearch == 1 and vim.fn.searchcount().exact_match == 0 then
-      vim.schedule(function () vim.cmd.nohlsearch() end)
-    end
-  end
-})
-
 -- not using the "normal" way to configure osc52 as pasting is not reliably
 -- possible most terminals disable pasting by default, if they implement it
 -- at all.
 -- here we use the default clipboard implementation (xclip, tmux, ...) and
--- additionally yank to osc52 
+-- additionally yank to osc52
 vim.o.clipboard = "unnamedplus"
 
-local osc52 = require('vim.ui.clipboard.osc52') 
+local osc52 = require('vim.ui.clipboard.osc52')
 vim.api.nvim_create_autocmd('TextYankPost', { callback = function ()
   local reg = vim.v.event.regname
   if vim.v.event.operator == 'y' and (reg == '' or reg == '+' or reg == '*') then
