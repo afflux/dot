@@ -1,24 +1,3 @@
-# The following lines were added by compinstall
-
-zstyle ':completion:*' completer _complete _ignored _approximate
-zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
-zstyle ':completion:*' matcher-list '' 'm:{[:lower:]}={[:upper:]}' 'r:|[._-]=* r:|=*'
-zstyle :compinstall filename '/home/k/.zshrc'
-
-autoload -Uz compinit
-compinit
-# End of lines added by compinstall
-# Lines configured by zsh-newuser-install
-HISTFILE=~/.histfile
-HISTSIZE=1000
-SAVEHIST=1000
-setopt appendhistory extendedglob nomatch magic_equal_subst interactivecomments
-unsetopt beep
-bindkey -e
-# End of lines configured by zsh-newuser-install
-
-export WORDCHARS=''
-
 # enable color support of ls and also add handy aliases
 
 if [ -x /usr/bin/dircolors ]; then
@@ -35,6 +14,26 @@ if [ -x /usr/bin/dircolors ]; then
     alias fgrep='fgrep --color=auto'
     alias egrep='egrep --color=auto'
 fi
+
+# The following lines were added by compinstall
+
+zstyle ':completion:*' completer _complete _ignored _approximate
+zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+zstyle ':completion:*' matcher-list '' 'm:{[:lower:]}={[:upper:]}' 'r:|[._-]=* r:|=*'
+zstyle :compinstall filename '/home/k/.zshrc'
+
+autoload -Uz compinit
+compinit
+
+# End of lines added by compinstall
+# Lines configured by zsh-newuser-install
+HISTFILE=~/.histfile
+HISTSIZE=1000
+SAVEHIST=1000
+setopt appendhistory extendedglob nomatch magic_equal_subst interactivecomments
+unsetopt beep
+bindkey -e
+# End of lines configured by zsh-newuser-install
 
 function color_test {
 	T='gYw';
