@@ -197,7 +197,21 @@ unset SSH_AGENT_PID
 export SSH_AUTH_SOCK="$(gpgconf --list-dirs agent-ssh-socket)"
 precmd () { print -Pn "\e]0;$PWD\a" }
 
+autoload -U select-word-style
+select-word-style normal
+zstyle ':zle:*' word-chars '.'
+
 [ -r ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh ] && source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
+[ -r /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ] && source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets)
 ZSH_AUTOSUGGEST_USE_ASYNC=1
-[ -r /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ] && source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+# highlight style for comments assumes that bold black is readable.
+# it isn't! https://github.com/zsh-users/zsh-syntax-highlighting/issues/510
+ZSH_HIGHLIGHT_STYLES[comment]="fg=8"
+
+autoload -z edit-command-line
+zle -N edit-command-line
+bindkey "^X^E" edit-command-line
+
+alias fd="fdfind"
