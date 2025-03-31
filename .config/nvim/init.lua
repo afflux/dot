@@ -164,8 +164,12 @@ vim.o.clipboard = "unnamedplus"
 local osc52 = require('vim.ui.clipboard.osc52')
 vim.api.nvim_create_autocmd('TextYankPost', { callback = function ()
   local reg = vim.v.event.regname
-  if vim.v.event.operator == 'y' and (reg == '' or reg == '+' or reg == '*') then
-    osc52.copy(reg)
+  if reg == '' then
+    reg = '+'
+  end
+  if vim.v.event.operator == 'y' and (reg == '+' or reg == '*') then
+    vim.highlight.on_yank()
+    osc52.copy(reg)(vim.v.event.regcontents)
   end
 end
 })
